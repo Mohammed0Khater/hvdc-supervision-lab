@@ -4,6 +4,7 @@ from pathlib import Path
 from hvdc_lab.engine import PlantSimulator
 from hvdc_lab.scenarios import load_settings, run_scenario
 
+
 def test_station_b_unavailable_scenario_is_rejected(tmp_path: Path) -> None:
     summary = run_scenario(
         "station_b_unavailable",
