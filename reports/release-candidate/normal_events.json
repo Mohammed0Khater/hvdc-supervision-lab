@@ -1,0 +1,55 @@
+{
+  "scenario": {
+    "name": "Normal startup and steady operation",
+    "description": "Start the simulated link, ramp toward 900 MW, and remain within the synthetic training envelope.",
+    "duration_s": 20,
+    "step_s": 1,
+    "events": [
+      {
+        "at_s": 1,
+        "type": "command",
+        "command": "start"
+      },
+      {
+        "at_s": 2,
+        "type": "setpoint",
+        "power_mw": 900
+      }
+    ]
+  },
+  "events": [
+    {
+      "time_s": 0.0,
+      "event_type": "INITIALIZED",
+      "message": "Simulator initialized in STANDBY"
+    },
+    {
+      "time_s": 0.0,
+      "event_type": "START_ACCEPTED",
+      "message": "Start accepted; simulated link entered RUNNING state"
+    },
+    {
+      "time_s": 1.0,
+      "event_type": "SETPOINT_ACCEPTED",
+      "message": "Accepted requested power setpoint 900.0 MW"
+    }
+  ],
+  "final_snapshot": {
+    "time_s": 20.0,
+    "timestamp_utc": "2026-11-17T21:04:09+00:00",
+    "state": "RUNNING",
+    "requested_power_mw": 900.0,
+    "dc_voltage_kv": 400.0,
+    "dc_current_ka": 2.25,
+    "active_power_mw": 900.0,
+    "cooling_temperature_c": 45.0,
+    "communication_healthy": true,
+    "sensor_quality_good": true,
+    "telemetry_age_s": 0.0,
+    "station_a_ready": true,
+    "station_b_ready": true,
+    "trip_latched": false,
+    "trip_cause": "",
+    "active_alarms": []
+  }
+}

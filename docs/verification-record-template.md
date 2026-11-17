@@ -2,19 +2,19 @@
 
 - Project: HVDCLAB-001
 - Software revision / Git commit:
-- Configuration revision:
-- Test date (UTC):
-- Tester:
-- Python version:
-- Operating system:
+- Configuration revision: 
+- Test date (UTC): 17/11/2026
+- Tester: Mohammed Medhat Khater    
+- Python version: 3.13.17
+- Operating system: Windows 11
 
 ## Automated test results
 
 | Test command | Result (PASS/FAIL) | Evidence path | Notes |
 |---|---|---|---|
-| `ruff check src tests` | | | |
-| `pytest -q` | | | |
-| `hvdc-lab simulate-all --output-dir reports/run-YYYYMMDD` | | | |
+| `ruff check src tests` |PASS| | |
+| `pytest -q` |PASS| | |
+| `hvdc-lab simulate-all --output-dir reports/run-YYYYMMDD` |PASS | | |
 
 ## OPC UA integration results
 
