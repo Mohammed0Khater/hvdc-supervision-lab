@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.13
+    commands:
+      - python3 --version
+      - python3 -m pip install --upgrade pip
+      - python3 -m pip install -e ".[dev]"
+  pre_build:
+    commands:
+      - ruff check src tests
+  build:
+    commands:
+      - coverage run -m pytest -q
+      - coverage report
+      - coverage xml -o coverage.xml
+      - hvdc-lab simulate-all --output-dir reports/codebuild
+  post_build:
+    commands:
+      - echo "Training-lab verification pipeline completed"
+
+artifacts:
+  files:
+    - "reports/codebuild/**/*"
+    - "coverage.xml"
+  discard-paths: no

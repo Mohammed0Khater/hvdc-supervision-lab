@@ -1,0 +1,10 @@
+time_s,timestamp_utc,state,requested_power_mw,dc_voltage_kv,dc_current_ka,active_power_mw,cooling_temperature_c,communication_healthy,sensor_quality_good,telemetry_age_s,station_a_ready,station_b_ready,trip_latched,trip_cause,active_alarms
+0.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,True,True,0.0,True,True,False,,
+1.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+2.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+3.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+4.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+5.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+6.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+7.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY
+8.0,2026-11-15T18:16:18+00:00,STANDBY,900.0,400.0,0.0,0.0,45.0,False,True,0.0,True,True,False,,COMMUNICATION_UNHEALTHY

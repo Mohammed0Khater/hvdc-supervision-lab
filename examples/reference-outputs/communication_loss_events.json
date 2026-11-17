@@ -1,0 +1,74 @@
+{
+  "scenario": {
+    "name": "Supervisory communication loss",
+    "description": "Drop the simulated station communication flag and confirm alarm and delayed protective trip behavior.",
+    "duration_s": 15,
+    "step_s": 1,
+    "events": [
+      {
+        "at_s": 1,
+        "type": "command",
+        "command": "start"
+      },
+      {
+        "at_s": 2,
+        "type": "setpoint",
+        "power_mw": 900
+      },
+      {
+        "at_s": 7,
+        "type": "inject",
+        "values": {
+          "communication_healthy": false
+        }
+      }
+    ]
+  },
+  "events": [
+    {
+      "time_s": 0.0,
+      "event_type": "INITIALIZED",
+      "message": "Simulator initialized in STANDBY"
+    },
+    {
+      "time_s": 0.0,
+      "event_type": "START_ACCEPTED",
+      "message": "Start accepted; simulated link entered RUNNING state"
+    },
+    {
+      "time_s": 1.0,
+      "event_type": "SETPOINT_ACCEPTED",
+      "message": "Accepted requested power setpoint 900.0 MW"
+    },
+    {
+      "time_s": 6.0,
+      "event_type": "SCENARIO_INJECTION",
+      "message": "Injected: communication_healthy=False"
+    },
+    {
+      "time_s": 8.0,
+      "event_type": "PROTECTIVE_TRIP",
+      "message": "Training trip latched: COMMUNICATION_LOSS"
+    }
+  ],
+  "final_snapshot": {
+    "time_s": 15.0,
+    "timestamp_utc": "2026-11-15T18:16:18+00:00",
+    "state": "TRIPPED",
+    "requested_power_mw": 900.0,
+    "dc_voltage_kv": 400.0,
+    "dc_current_ka": 0.0,
+    "active_power_mw": 0.0,
+    "cooling_temperature_c": 45.0,
+    "communication_healthy": false,
+    "sensor_quality_good": true,
+    "telemetry_age_s": 0.0,
+    "station_a_ready": true,
+    "station_b_ready": true,
+    "trip_latched": true,
+    "trip_cause": "COMMUNICATION_LOSS",
+    "active_alarms": [
+      "COMMUNICATION_UNHEALTHY"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+name: HVDC Supervision Lab CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, unit tests and scenario regression
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install project and development tools
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+      - name: Static checks
+        run: ruff check src tests
+      - name: Run automated tests
+        run: coverage run -m pytest -q && coverage report && coverage xml -o coverage.xml
+      - name: Execute all scenario regressions
+        run: hvdc-lab simulate-all --output-dir reports/ci
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hvdc-lab-verification-evidence
+          path: |
+            reports/ci/**
+            .coverage
+            coverage.xml
+          if-no-files-found: ignore

@@ -1,0 +1,11 @@
+{
+  "name": "DC overvoltage trip",
+  "description": "Inject a synthetic high DC-voltage measurement while the link is running; verify alarm, delay, and latched trip behavior.",
+  "duration_s": 15,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900},
+    {"at_s": 7, "type": "inject", "values": {"dc_voltage_kv": 455.0}}
+  ]
+}

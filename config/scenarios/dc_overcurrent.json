@@ -1,0 +1,11 @@
+{
+  "name": "DC overcurrent trip",
+  "description": "Inject a synthetic DC-current measurement above the configured training trip threshold.",
+  "duration_s": 15,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900},
+    {"at_s": 7, "type": "inject", "values": {"dc_current_ka": 3.5}}
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "scenario": {
+    "name": "Station B unavailable startup interlock",
+    "description": "Station B is not ready when the operator requests startup.",
+    "duration_s": 8,
+    "step_s": 1,
+    "events": [
+      {
+        "at_s": 1,
+        "type": "inject",
+        "values": {
+          "station_b_ready": false
+        }
+      },
+      {
+        "at_s": 2,
+        "type": "command",
+        "command": "start"
+      }
+    ]
+  },
+  "events": [
+    {
+      "time_s": 0.0,
+      "event_type": "INITIALIZED",
+      "message": "Simulator initialized in STANDBY"
+    },
+    {
+      "time_s": 0.0,
+      "event_type": "SCENARIO_INJECTION",
+      "message": "Injected: station_b_ready=False"
+    },
+    {
+      "time_s": 1.0,
+      "event_type": "COMMAND_REJECTED",
+      "message": "Start rejected: Station B is not ready"
+    }
+  ],
+  "final_snapshot": {
+    "time_s": 8.0,
+    "timestamp_utc": "2026-11-17T19:19:59+00:00",
+    "state": "STANDBY",
+    "requested_power_mw": 900.0,
+    "dc_voltage_kv": 400.0,
+    "dc_current_ka": 0.0,
+    "active_power_mw": 0.0,
+    "cooling_temperature_c": 45.0,
+    "communication_healthy": true,
+    "sensor_quality_good": true,
+    "telemetry_age_s": 0.0,
+    "station_a_ready": true,
+    "station_b_ready": false,
+    "trip_latched": false,
+    "trip_cause": "",
+    "active_alarms": []
+  }
+}

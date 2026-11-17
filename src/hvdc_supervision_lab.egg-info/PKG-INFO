@@ -1,0 +1,463 @@
+Metadata-Version: 2.4
+Name: hvdc-supervision-lab
+Version: 0.1.0
+Summary: Training-only two-terminal HVDC supervisory software, simulation, OPC UA and verification lab
+License: MIT
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: asyncua==2.1.0
+Provides-Extra: dev
+Requires-Dist: pytest<10,>=8.3; extra == "dev"
+Requires-Dist: ruff<1,>=0.11; extra == "dev"
+Requires-Dist: coverage<8,>=7.6; extra == "dev"
+Dynamic: license-file
+
+# HVDC Supervision & Communication Verification Lab
+
+**A training-only software engineering demonstrator for supervisory behavior, industrial communication, automated verification, and engineering change control around a fictional two-terminal HVDC link.**
+
+> **Safety and accuracy boundary:** This repository is not Hitachi Energy MACH software, is not an HVDC converter model, is not a protection relay, and is not suitable for connection to any real plant or OT network. All plant values, limits, delays, identifiers, and test conditions are synthetic. The OPC UA server is a local learning endpoint and is not hardened for network use.
+
+## 1. Why this project exists
+
+This project is designed as a practical learning lab for the entry-level HVDC Control & Protection Software Engineer role in System Supervision & Communication. It exercises the engineering activities named in the role description: software development, testing, verification, system integration, industrial communication, technical documentation, cross-domain interface thinking, and a small virtual commissioning rehearsal.
+
+Hitachi Energy describes MACH as a computerized HVDC control and protection platform that includes station control/monitoring servers, operator workstations, control and protection computers, digital signal processing units, I/O systems, and valve-control units. This project does **not** reproduce those components. It concentrates on a small supervisory-software slice: simulated operating states, alarms, command validation, data quality, status publication, and a local protocol interface.
+
+## 2. What you will build and practise
+
+- A deterministic simulator for a fictional two-terminal DC link.
+- A small supervisory state model: `STANDBY`, `RUNNING`, `TRIPPED`.
+- Simulated start, stop, power-setpoint, and trip-reset request handling.
+- Interlocks based on station readiness, communications health, measurement quality, and telemetry freshness.
+- Synthetic alarm and delayed/latching trip behavior for DC voltage, current, communications, measurement quality, stale data, and cooling temperature.
+- A local OPC UA server that publishes telemetry/status and accepts simulated command requests.
+- Repeatable JSON fault scenarios that generate CSV telemetry and JSON event evidence.
+- Unit tests, static analysis, scenario regression, GitHub Actions CI, and an AWS CodeBuild-compatible `buildspec.yml`.
+- Requirements traceability, interface documentation, test plans, a verification record, a fictional cross-functional design review, and a virtual FAT-style checklist.
+
+## 3. Architecture
+
+```mermaid
+flowchart LR
+    SIM[Plant simulator] --> ENG[Supervisory / alarm engine]
+    ENG --> UA[Local OPC UA server]
+    UA <--> CLIENT[CLI client or UAExpert]
+    ENG --> CSV[CSV telemetry + JSON events]
+    DEV[Developer workstation] --> GIT[Git repository]
+    GIT --> GHA[GitHub Actions]
+    GIT --> CB[AWS CodeBuild local agent]
+    GHA --> EVIDENCE[Verification evidence]
+    CB --> EVIDENCE
+```
+
+### Approximate training mapping
+
+| Industrial-system concept | Training-project representation |
+|---|---|
+| Station supervision / monitoring application | `PlantSimulator` state, alarm, and command logic |
+| Operator workstation | Bundled OPC UA CLI client or a separate OPC UA client such as UAExpert |
+| Plant I/O and measurements | Synthetic telemetry values and data-quality flags |
+| Industrial supervisory interface | Local OPC UA server and typed address space |
+| Engineering verification | pytest, scenario outputs, interface checks, test records |
+| Software configuration/change control | Git branches, pull requests, issues, CI, version tag |
+
+This is an architectural analogy only. It is not a description of Hitachi Energy's internal software architecture, engineering methods, or MACH implementation.
+
+## 4. Technology choices
+
+| Area | Tool | Cost for this learning path | Purpose |
+|---|---|---:|---|
+| Programming | Python 3.13 | Free | Simulator and command-line tools |
+| Editor | Visual Studio Code | Free | Editing and debugging |
+| Version control | Git | Free | Commits, branches, change history |
+| OPC UA | `asyncua` 2.1.0 | Free / open source | Local OPC UA client/server implementation |
+| Tests | pytest + coverage | Free / open source | Automated verification and coverage |
+| Static checks | Ruff | Free / open source | Linting and common error checks |
+| Hosted CI | GitHub Actions (public repo) | Free for standard runners in public repositories | Run checks on pushes and pull requests |
+| AWS build familiarity | AWS CodeBuild `buildspec.yml` + local build agent | No AWS account or AWS build minutes for local execution; Docker uses local resources | Execute the same build phases in a CodeBuild-style environment |
+| Optional packet inspection | Wireshark | Free / open source | Inspect the local OPC UA session |
+
+A separate AWS account is **not** needed to complete the core project. A public GitHub repository is recommended so standard GitHub-hosted Actions runners remain free under GitHub's current policy. Do not enable usage-based paid services just to complete this lab.
+
+## 5. Repository layout
+
+```text
+hvdc-supervision-lab/
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   ├── pull_request_template.md
+│   └── workflows/ci.yml
+├── config/
+│   ├── settings.json
+│   └── scenarios/
+├── docs/
+│   ├── beginner-walkthrough.md
+│   ├── commissioning-simulation-checklist.md
+│   ├── decisions-log.md
+│   ├── engineering-workflow.md
+│   ├── hvdc-concepts-primer.md
+│   ├── interface-control-document.md
+│   ├── operator-quick-guide.md
+│   ├── project-charter.md
+│   ├── protocol-learning-note.md
+│   ├── requirements-traceability.csv
+│   ├── scenario-catalog.md
+│   ├── safety-and-integrity.md
+│   ├── stakeholder-review-exercise.md
+│   ├── system-architecture.md
+│   ├── test-plan.md
+│   └── verification-record-template.md
+├── examples/reference-outputs/ # sample CSV/JSON results for comparison
+├── reports/                  # generated run evidence; ignored by Git
+├── src/hvdc_lab/
+│   ├── cli.py
+│   ├── engine.py
+│   ├── opcua_gateway.py
+│   └── scenarios.py
+├── tests/
+├── buildspec.yml             # AWS CodeBuild build instructions
+├── LICENSE
+├── pyproject.toml
+└── README.md
+```
+
+## 6. Prerequisites
+
+The instructions below assume Windows 10/11, PowerShell, and a standard 64-bit PC.
+
+### Required software
+
+1. **Python 3.13.x (64-bit):** install from [Python for Windows](https://www.python.org/downloads/windows/). During installation, enable the Python launcher if offered. Confirm with `py -3.13 --version`.
+2. **Git for Windows:** install from [git-scm.com](https://git-scm.com/download/win). Confirm with `git --version`.
+3. **Visual Studio Code:** install from [code.visualstudio.com](https://code.visualstudio.com/). In Extensions, install Microsoft's **Python** and **Pylance** extensions.
+4. **A GitHub account:** use [github.com](https://github.com/) for a public portfolio repository.
+
+### Optional software
+
+- **Wireshark:** [wireshark.org/download](https://www.wireshark.org/download.html). Useful for inspecting local OPC UA traffic; not required to run the project.
+- **UAExpert:** an optional graphical OPC UA client. The built-in CLI client is enough for all required exercises, so do not delay the project to obtain a GUI client.
+- **Docker Desktop + WSL2:** only required for the optional local AWS CodeBuild-agent exercise in Section 11. The core simulator and GitHub Actions workflow do not need Docker.
+
+## 7. Install and run the project on Windows
+
+### Step 1 — Extract and open the folder
+
+Extract the project folder. Open PowerShell in the folder containing `pyproject.toml` and `README.md`.
+
+In VS Code, choose **File → Open Folder** and select `hvdc-supervision-lab`.
+
+### Step 2 — Check Python and Git
+
+```powershell
+py -3.13 --version
+git --version
+```
+
+The Python result should begin with `Python 3.13`. If `py` is not recognized, rerun the Python installer and enable the Python launcher, or install Python from the official Windows downloads page.
+
+### Step 3 — Create an isolated environment
+
+A virtual environment keeps this project's packages separate from other Python work on your computer.
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation in the current terminal, run this once in that terminal and retry activation:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+```
+
+This applies only to the current PowerShell process. You can also skip activation and call `.\.venv\Scripts\python.exe` explicitly.
+
+### Step 4 — Install the project and free development tools
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev]"
+```
+
+This installs the project, `asyncua`, pytest, coverage, and Ruff. Internet access is needed once to download these packages.
+
+### Step 5 — Run the automated checks
+
+```powershell
+ruff check src tests
+coverage run -m pytest -q
+coverage report
+coverage xml -o coverage.xml
+```
+
+The supplied test suite should pass. The coverage target is 75% for the core simulation modules; OPC UA server/client behavior is additionally checked by the manual integration exercise below.
+
+### Step 6 — List and run simulations
+
+```powershell
+hvdc-lab list-scenarios
+hvdc-lab simulate --scenario normal --output-dir reports/normal
+hvdc-lab simulate --scenario dc_overvoltage --output-dir reports/overvoltage
+hvdc-lab simulate-all --output-dir reports/full-regression
+```
+
+Each scenario writes two files:
+
+- `*_telemetry.csv`: snapshots over simulated time. Open this in VS Code or a spreadsheet application to inspect voltage, current, power, state, alarms, and trip status.
+- `*_events.json`: scenario definition, command/injection event log, and final snapshot.
+
+### Step 7 — Understand the dummy plant data
+
+The configuration in `config/settings.json` is deliberately synthetic:
+
+| Item | Dummy value | Why it exists |
+|---|---:|---|
+| Nominal DC voltage | 400 kV | Reference value for the simple DC link model |
+| Normal target power | 900 MW | Normal-operation exercise |
+| Maximum training setpoint | 1,000 MW | Reject out-of-range operator requests |
+| DC overvoltage alarm | 430 kV | Demonstrate an alarm separately from a trip |
+| DC overvoltage trip | 450 kV | Demonstrate a delayed, latched trip |
+| DC undervoltage trip | 350 kV | Exercise the low-voltage protection path |
+| DC overcurrent alarm | 2.8 kA | Demonstrate current alarm handling |
+| DC overcurrent trip | 3.2 kA | Demonstrate trip behavior |
+| Cooling alarm / trip | 80 / 95 °C | Show alarm-only versus trip-level behavior |
+| Stale telemetry limit | 2 seconds | Teach data freshness and interlocks |
+
+For the simplified model, active power in MW is calculated from DC voltage in kV multiplied by current in kA. For example, `400 kV × 2.25 kA = 900 MW`. Do not reuse these limits or timings for a real HVDC system.
+
+### Step 8 — Explore and modify scenarios
+
+Open `config/scenarios/normal.json`. It contains a timeline of events. For example:
+
+```json
+{
+  "name": "Normal startup and steady operation",
+  "description": "Start the simulated link and ramp toward the training setpoint.",
+  "duration_s": 20,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900}
+  ]
+}
+```
+
+Try copying the normal scenario to `config/scenarios/your_test.json`, changing the start time, setpoint, or duration, then run it:
+
+```powershell
+hvdc-lab simulate --scenario your_test --output-dir reports/your_test
+```
+
+Supported event types are `command`, `setpoint`, and `inject`. See `docs/scenario-catalog.md` for the bundled cases.
+
+## 8. Run and test the OPC UA interface
+
+OPC UA is an implemented industrial communication protocol in this lab. It is a better fit for the supervisory software exercise than pretending to implement EtherCAT without EtherCAT master/slave hardware.
+
+### Step 1 — Start the OPC UA server
+
+Open a new PowerShell terminal in the project folder, activate `.venv`, and run:
+
+```powershell
+python -m hvdc_lab opcua-server
+```
+
+The endpoint should print as:
+
+```text
+opc.tcp://127.0.0.1:4840/hvdc-lab/
+```
+
+Keep this terminal open. The endpoint is deliberately bound to the loopback address `127.0.0.1`.
+
+### Step 2 — Open another terminal and send a command
+
+Set a training setpoint, then start the simulated link:
+
+```powershell
+python -m hvdc_lab opcua-client --command setpoint --power-mw 850
+python -m hvdc_lab opcua-client --command start
+```
+
+You should see the operating state change to `RUNNING` and the command acknowledgement update. Then stop the link:
+
+```powershell
+python -m hvdc_lab opcua-client --command stop
+```
+
+### Step 3 — Test an interlock
+
+Stop the server with `Ctrl+C`. For a more detailed fault exercise, use the deterministic scenario command to capture the communication-loss and startup-interlock behavior. The OPC UA server currently starts with a healthy default plant state; scenario injection is performed by the scenario runner. Do not write arbitrary fault values into the OPC UA address space because the process telemetry nodes are intentionally read-only.
+
+### Step 4 — Browse the address space
+
+Use the bundled client or an optional OPC UA GUI client to browse:
+
+```text
+Objects
+└── HVDCLink
+    ├── Telemetry
+    ├── Status
+    └── Control
+```
+
+The exact node list, types, and write permissions are in `docs/interface-control-document.md`.
+
+### Step 5 — Optional Wireshark inspection
+
+1. Start Wireshark.
+2. Select the Npcap loopback adapter (if available).
+3. Start a capture, then start the OPC UA server and client.
+4. Apply this display filter:
+
+```text
+tcp.port == 4840
+```
+
+5. Observe the local client/server connection and command/read exchanges. Capture only your own local lab traffic.
+
+## 9. Use the engineering process — not just the code
+
+Before reading the implementation, read [`docs/hvdc-concepts-primer.md`](docs/hvdc-concepts-primer.md) for the power-system vocabulary used here. After the first baseline run, follow [`docs/beginner-walkthrough.md`](docs/beginner-walkthrough.md). It takes you through creating your own JSON scenario, adding an automated test, using the OPC UA client/server, and completing a Git feature branch and pull request.
+
+The repository contains starter templates for a lightweight engineering workflow:
+
+1. Read `docs/project-charter.md` and `docs/system-architecture.md`.
+2. Review `docs/requirements-traceability.csv` and identify one requirement.
+3. Create a GitHub Issue with acceptance criteria.
+4. Create a feature branch for that Issue.
+5. Make the smallest change that satisfies the requirement.
+6. Add or update a test and scenario if behavior changes.
+7. Update the interface document, test plan, and traceability matrix when applicable.
+8. Open a Pull Request using the supplied template.
+9. Review the CI results before merging.
+10. Record the tested commit/configuration in a verification record.
+11. Tag a passing baseline, for example `v0.1.0`.
+
+Use `docs/engineering-workflow.md`, `docs/test-plan.md`, `docs/verification-record-template.md`, and `docs/commissioning-simulation-checklist.md` as working documents, not decorations. The fictional reviewer comments in `docs/stakeholder-review-exercise.md` are role-play prompts, not real stakeholder approvals. A solo repository cannot prove actual teamwork or independent peer review; use it to prepare for those conversations, not to claim you have already done them.
+
+## 10. GitHub Actions as the free pipeline/Boards workaround
+
+This is the recommended default because it is free for a public repository and does not require an AWS account:
+
+1. Create a **public** repository named `hvdc-supervision-lab` on GitHub. Do not initialize it with another README or `.gitignore`, because this project already has both.
+2. From PowerShell in the project directory:
+
+```powershell
+git init -b main
+git add .
+git commit -m "chore: initial HVDC supervision lab"
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/hvdc-supervision-lab.git
+git push -u origin main
+```
+
+3. Replace `YOUR_GITHUB_USERNAME` with your own GitHub username.
+4. Open the repository on GitHub and select **Actions**. The workflow at `.github/workflows/ci.yml` should run on the push.
+5. Check that Ruff, pytest/coverage, and all simulation scenarios succeed.
+6. Create an Issue and a branch, make one small change, push it, and open a Pull Request. The same workflow should run on the PR.
+7. Use GitHub Issues for work items and a GitHub Project board for Backlog → In Progress → Review → Done.
+
+GitHub Actions is not Azure DevOps, but this covers the practical source-control, work-item, pull-request, and CI habits an entry-level engineer should understand. The free tool mapping for this project is:
+
+| Azure DevOps-style capability | Free project implementation | Notes |
+|---|---|---|
+| Repos | Git + public GitHub repository | AWS CodeCommit returned to general availability in November 2025, but AWS lists it at USD 1 per active user/month, so it is excluded from the zero-cost path |
+| Boards / work items | GitHub Issues + GitHub Projects | Use issue IDs, acceptance criteria, assignees, and Backlog → In Progress → Review → Done |
+| Pipelines / CI | GitHub Actions | Runs automatically on push and pull request; standard hosted runners are free for public repositories |
+| AWS build environment | `buildspec.yml` + AWS CodeBuild local agent | Runs CodeBuild phases locally in Docker without using AWS build minutes or creating cloud resources |
+| Full cloud pipeline orchestration | Not used | There is no need to create CodePipeline, S3 artifact buckets, or CloudWatch resources for this lab; those can create charges |
+
+## 11. AWS CodeBuild local-agent exercise (optional, no AWS account required)
+
+You asked for an AWS-local equivalent of the Azure DevOps pipeline portion. AWS CodeBuild supports running builds locally with its official local build agent. The repository's `buildspec.yml` already defines the install, lint, test, scenario-regression, and artifact phases.
+
+### What this gives you
+
+- The `buildspec.yml` format used by AWS CodeBuild.
+- An Amazon-provided CodeBuild container image.
+- A local run of CodeBuild's build phases from your workstation.
+- Familiarity with the AWS build environment without creating a cloud bill.
+
+It does **not** create a complete local CodePipeline, hosted repository, or Azure Boards equivalent. GitHub remains the free repository/issue/PR/hosted-CI platform.
+
+### Install the local prerequisites
+
+1. Install Docker Desktop and enable its WSL2 backend.
+2. Install WSL2 Ubuntu if it is not already available:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+3. In Docker Desktop settings, enable WSL integration for the Ubuntu distribution.
+4. Open Ubuntu and verify:
+
+```bash
+docker --version
+git --version
+```
+
+5. Navigate to the project folder from Ubuntu. For a project under your Windows user folder, it will be under `/mnt/c/Users/<YOUR_WINDOWS_USER>/...`.
+
+### Download the CodeBuild image and local agent
+
+From the Ubuntu terminal in the repository root:
+
+```bash
+docker pull public.ecr.aws/codebuild/standard:8.0
+docker pull public.ecr.aws/codebuild/local-builds:latest
+curl -O https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/local_builds/codebuild_build.sh
+chmod +x codebuild_build.sh
+```
+
+### Run the local build
+
+```bash
+./codebuild_build.sh -i public.ecr.aws/codebuild/standard:8.0 -a /tmp/hvdc-build-artifacts
+```
+
+The script runs the commands described in `buildspec.yml` in a CodeBuild-style container. Review terminal output and the artifact folder. The first run downloads large Docker images and may take longer; subsequent runs reuse the local images.
+
+If the local agent reports an image/runtime mismatch, check AWS's current [available CodeBuild runtimes](https://docs.aws.amazon.com/codebuild/latest/userguide/available-runtimes.html) and [local build agent instructions](https://docs.aws.amazon.com/codebuild/latest/userguide/use-codebuild-agent.html). The standard image and runtime table can change; the local image must include Python 3.13.
+
+### AWS-native cloud services — why they are not required here
+
+AWS has CodeCommit, CodeBuild, and CodePipeline. CodeCommit returned to general availability on 24 November 2025, but AWS lists a cost of **USD 1 per active user per month**. CodeBuild and CodePipeline have limited free-tier allowances, but extra log, artifact, storage, or pipeline usage can still create charges. Because your requirement is zero cost, use GitHub for source control and orchestration, then use the CodeBuild local agent only as an optional local exercise. Do not create cloud pipelines, S3 artifact buckets, or other AWS resources just to finish this project. Check the [current CodeCommit FAQ/pricing](https://aws.amazon.com/codecommit/faqs/) before using it in any later AWS-hosted version.
+
+## 12. Learn the protocols honestly: OPC UA vs EtherCAT
+
+This lab implements OPC UA. It does not implement EtherCAT. They solve different communication problems: OPC UA is a common supervisory/client-server information interface, while EtherCAT is a deterministic industrial Ethernet fieldbus commonly used for cyclic process data between a master and slaves.
+
+Use `docs/protocol-learning-note.md` to learn the distinction and vocabulary. After you understand this project's OPC UA path, study EtherCAT master/slave architecture, process data mapping, cycle time, distributed clocks, and topology. Meaningful physical EtherCAT testing usually requires suitable master/slave hardware or a dedicated test setup; do not claim that this OPC UA exercise proves EtherCAT experience.
+
+## 13. Suggested completion sequence
+
+| Milestone | Your deliverable | Exit check |
+|---|---|---|
+| M0 — Environment | Python, VS Code, Git, virtual environment | Dependencies install cleanly |
+| M1 — Understand the system | Project charter, architecture, signal list | You can explain each node, unit, and state |
+| M2 — Run the simulator | Normal and fault scenarios | CSV and JSON evidence generated |
+| M3 — Test behavior | Unit tests and fault cases | All tests pass; coverage threshold met |
+| M4 — Industrial interface | OPC UA server/client session | Read/write and command acknowledgement verified |
+| M5 — Engineering process | Issues, branches, PR, CI | CI passes on a Pull Request |
+| M6 — AWS familiarity | Local CodeBuild agent | `buildspec.yml` passes locally, if Docker is installed |
+| M7 — Verification package | Test record and virtual FAT checklist | Evidence is tied to a commit and config revision |
+| M8 — Portfolio release | Clean GitHub repo and release tag | README, docs, tests, and limitations are clear |
+
+## 14. How to describe this project honestly on your CV
+
+Only after you personally complete and understand the relevant work, a defensible description would be:
+
+**HVDC Supervision & Communication Verification Lab (Personal Project)**
+- Built a Python-based two-terminal HVDC supervisory simulator with state handling, command interlocks, alarm/trip exercises, and synthetic telemetry.
+- Exposed simulated measurements and command handshakes through a local OPC UA server; verified data access and command acknowledgements with an OPC UA client.
+- Created repeatable fault scenarios and automated pytest regression checks, with GitHub Actions CI and an AWS CodeBuild-compatible build specification.
+
+Do **not** claim MACH development, EtherCAT implementation, real HVDC control/protection engineering, real-time control, certified safety logic, or site commissioning. A strong, accurately described simulator project is better than an inflated claim.
+
+## 15. License and attribution
+
+This project's original training code and documentation are provided under the MIT License. Third-party dependencies retain their own licenses; see their respective package metadata. Hitachi Energy, MACH, Azure DevOps, AWS, Python, GitHub, OPC UA, EtherCAT, and other product or protocol names are referenced only to identify technologies and are not endorsements.

@@ -1,0 +1,11 @@
+{
+  "name": "Bad measurement quality trip",
+  "description": "Inject a BAD quality flag and verify that the simulated supervisory application does not continue to treat the data as trustworthy.",
+  "duration_s": 15,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900},
+    {"at_s": 7, "type": "inject", "values": {"sensor_quality_good": false}}
+  ]
+}

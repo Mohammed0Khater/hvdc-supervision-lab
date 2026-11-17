@@ -1,0 +1,17 @@
+requirement_id,requirement_text,project_evidence,verification,evidence_location
+R-01,Support software development testing and verification,Python simulator plus test suite plus CI,pytest and scenario regression,reports/ and tests/
+R-02,Develop and maintain software with guidance,Small modules issue-driven feature branches and PR template,review checklist and commit history,.github/pull_request_template.md
+R-03,Perform software testing and help identify and solve technical issues,Unit tests fault scenarios and defect issue template,pytest and reproducible issue report,tests/ and .github/ISSUE_TEMPLATE/bug_report.md
+R-04,Prepare and update technical documentation,Architecture interface specification test plan operator guide and release notes,documentation review checklist,docs/
+R-05,Collaborate across Control and Protection IT/OT Hardware and Operations,Explicit interface boundaries and simulated stakeholder review comments,review decisions and interface test plan,docs/stakeholder-review-exercise.md
+R-06,Take ownership plan tasks and ask for support,Milestones acceptance criteria assumptions and blocker/escalation template,issue board and decision log,docs/engineering-workflow.md
+R-07,Learn engineering processes tools and ways of working,Git branching PRs CI buildspec regression release baseline,automated CI and local build,reports/ and .github/workflows/ci.yml
+R-08,Safety integrity teamwork,Simulation-only boundary synthetic data no live control endpoints and review checklist,scope and hazard review,docs/safety-and-integrity.md
+R-09,Commissioning support opportunities,Virtual pre-commissioning and FAT/SAT-style checklist,execute safe software-only test cases,docs/commissioning-simulation-checklist.md
+R-10,Basic programming and software development,Python package command line interface dataclasses and modular design,pytest and ruff,src/hvdc_lab/
+R-11,Software testing and automation,Pytest regression scenarios coverage and GitHub Actions,CI on push and pull request,.github/workflows/ci.yml
+R-12,Digital control systems and supervisory state,STANDBY RUNNING TRIPPED state model and delayed alarm/trip logic,state transition and protection tests,src/hvdc_lab/engine.py
+R-13,Git or Azure DevOps familiarity,Git source control branches pull requests issue templates and build automation,GitHub Actions and AWS CodeBuild buildspec,README.md and buildspec.yml
+R-14,HVDC and power systems concepts,Two-terminal DC link abstractions and P=V*I relation,scenario and telemetry plausibility checks,docs/system-architecture.md
+R-15,EtherCAT or other industrial communications,OPC UA server/client nodes for telemetry and command handshakes,manual OPC UA client/server integration test,src/hvdc_lab/opcua_gateway.py and docs/interface-control-document.md
+R-16,Teamwork and professional communication,English-language requirement, test, issue and PR documentation,technical document quality review,docs/ and .github/

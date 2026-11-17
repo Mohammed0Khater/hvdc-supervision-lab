@@ -1,0 +1,33 @@
+{
+  "project": {
+    "project_id": "HVDCLAB-001",
+    "name": "Two-Terminal HVDC Supervision Training Demonstrator",
+    "configuration_revision": "0.1.0"
+  },
+  "model": {
+    "nominal_dc_voltage_kv": 400.0,
+    "default_power_setpoint_mw": 900.0,
+    "ramp_rate_mw_per_s": 250.0
+  },
+  "limits": {
+    "minimum_power_mw": 0.0,
+    "maximum_power_mw": 1000.0,
+    "dc_overvoltage_alarm_kv": 430.0,
+    "dc_undervoltage_alarm_kv": 370.0,
+    "dc_overvoltage_trip_kv": 450.0,
+    "dc_undervoltage_trip_kv": 350.0,
+    "dc_overcurrent_alarm_ka": 2.8,
+    "dc_overcurrent_trip_ka": 3.2,
+    "cooling_alarm_c": 80.0,
+    "cooling_trip_c": 95.0,
+    "stale_data_limit_s": 2.0
+  },
+  "timing": {
+    "voltage_trip_delay_s": 1.0,
+    "current_trip_delay_s": 1.0,
+    "communication_trip_delay_s": 2.0,
+    "bad_quality_trip_delay_s": 1.0,
+    "cooling_trip_delay_s": 2.0,
+    "stale_data_trip_delay_s": 2.0
+  }
+}

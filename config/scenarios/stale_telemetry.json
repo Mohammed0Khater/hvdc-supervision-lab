@@ -1,0 +1,11 @@
+{
+  "name": "Stale telemetry during operation",
+  "description": "Inject an old measurement timestamp and confirm the training supervisory logic alarms and trips after its configured delay.",
+  "duration_s": 15,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900},
+    {"at_s": 7, "type": "inject", "values": {"telemetry_age_s": 5.0}}
+  ]
+}

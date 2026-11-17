@@ -1,0 +1,10 @@
+{
+  "name": "Normal startup and steady operation",
+  "description": "Start the simulated link, ramp toward 900 MW, and remain within the synthetic training envelope.",
+  "duration_s": 20,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900}
+  ]
+}

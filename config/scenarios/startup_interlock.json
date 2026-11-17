@@ -1,0 +1,10 @@
+{
+  "name": "Startup interlock - communication unavailable",
+  "description": "Make the simulated supervisory communication unhealthy before a start request; the command must be rejected.",
+  "duration_s": 8,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "inject", "values": {"communication_healthy": false}},
+    {"at_s": 2, "type": "command", "command": "start"}
+  ]
+}

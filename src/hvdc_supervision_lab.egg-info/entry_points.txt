@@ -1,0 +1,2 @@
+[console_scripts]
+hvdc-lab = hvdc_lab.cli:main

@@ -1,0 +1,69 @@
+{
+  "scenario": {
+    "name": "Cooling temperature warning without trip",
+    "description": "Raise cooling temperature above the training alarm threshold but below the trip threshold.",
+    "duration_s": 15,
+    "step_s": 1,
+    "events": [
+      {
+        "at_s": 1,
+        "type": "command",
+        "command": "start"
+      },
+      {
+        "at_s": 2,
+        "type": "setpoint",
+        "power_mw": 900
+      },
+      {
+        "at_s": 7,
+        "type": "inject",
+        "values": {
+          "cooling_temperature_c": 85.0
+        }
+      }
+    ]
+  },
+  "events": [
+    {
+      "time_s": 0.0,
+      "event_type": "INITIALIZED",
+      "message": "Simulator initialized in STANDBY"
+    },
+    {
+      "time_s": 0.0,
+      "event_type": "START_ACCEPTED",
+      "message": "Start accepted; simulated link entered RUNNING state"
+    },
+    {
+      "time_s": 1.0,
+      "event_type": "SETPOINT_ACCEPTED",
+      "message": "Accepted requested power setpoint 900.0 MW"
+    },
+    {
+      "time_s": 6.0,
+      "event_type": "SCENARIO_INJECTION",
+      "message": "Injected: cooling_temperature_c=85.0"
+    }
+  ],
+  "final_snapshot": {
+    "time_s": 15.0,
+    "timestamp_utc": "2026-11-17T17:44:35+00:00",
+    "state": "RUNNING",
+    "requested_power_mw": 900.0,
+    "dc_voltage_kv": 400.0,
+    "dc_current_ka": 2.25,
+    "active_power_mw": 900.0,
+    "cooling_temperature_c": 85.0,
+    "communication_healthy": true,
+    "sensor_quality_good": true,
+    "telemetry_age_s": 0.0,
+    "station_a_ready": true,
+    "station_b_ready": true,
+    "trip_latched": false,
+    "trip_cause": "",
+    "active_alarms": [
+      "COOLING_TEMPERATURE_HIGH_ALARM"
+    ]
+  }
+}

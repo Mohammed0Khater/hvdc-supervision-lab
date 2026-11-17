@@ -1,0 +1,11 @@
+{
+  "name": "Supervisory communication loss",
+  "description": "Drop the simulated station communication flag and confirm alarm and delayed protective trip behavior.",
+  "duration_s": 15,
+  "step_s": 1,
+  "events": [
+    {"at_s": 1, "type": "command", "command": "start"},
+    {"at_s": 2, "type": "setpoint", "power_mw": 900},
+    {"at_s": 7, "type": "inject", "values": {"communication_healthy": false}}
+  ]
+}
