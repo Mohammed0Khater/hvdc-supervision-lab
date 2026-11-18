@@ -6,8 +6,6 @@
 
 ## 1. Why this project exists
 
-This project is designed as a practical learning lab for the entry-level HVDC Control & Protection Software Engineer role in System Supervision & Communication. It exercises the engineering activities named in the role description: software development, testing, verification, system integration, industrial communication, technical documentation, cross-domain interface thinking, and a small virtual commissioning rehearsal.
-
 Hitachi Energy describes MACH as a computerized HVDC control and protection platform that includes station control/monitoring servers, operator workstations, control and protection computers, digital signal processing units, I/O systems, and valve-control units. This project does **not** reproduce those components. It concentrates on a small supervisory-software slice: simulated operating states, alarms, command validation, data quality, status publication, and a local protocol interface.
 
 ## 2. What you will build and practise
