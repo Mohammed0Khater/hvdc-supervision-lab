@@ -432,16 +432,6 @@ Use `docs/protocol-learning-note.md` to learn the distinction and vocabulary. Af
 | M7 — Verification package | Test record and virtual FAT checklist | Evidence is tied to a commit and config revision |
 | M8 — Portfolio release | Clean GitHub repo and release tag | README, docs, tests, and limitations are clear |
 
-## 14. How to describe this project honestly on your CV
-
-Only after you personally complete and understand the relevant work, a defensible description would be:
-
-**HVDC Supervision & Communication Verification Lab (Personal Project)**
-- Built a Python-based two-terminal HVDC supervisory simulator with state handling, command interlocks, alarm/trip exercises, and synthetic telemetry.
-- Exposed simulated measurements and command handshakes through a local OPC UA server; verified data access and command acknowledgements with an OPC UA client.
-- Created repeatable fault scenarios and automated pytest regression checks, with GitHub Actions CI and an AWS CodeBuild-compatible build specification.
-
-Do **not** claim MACH development, EtherCAT implementation, real HVDC control/protection engineering, real-time control, certified safety logic, or site commissioning. A strong, accurately described simulator project is better than an inflated claim.
 
 ## 15. License and attribution
 
