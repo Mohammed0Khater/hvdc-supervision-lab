@@ -416,21 +416,6 @@ This lab implements OPC UA. It does not implement EtherCAT. They solve different
 
 Use `docs/protocol-learning-note.md` to learn the distinction and vocabulary. After you understand this project's OPC UA path, study EtherCAT master/slave architecture, process data mapping, cycle time, distributed clocks, and topology. Meaningful physical EtherCAT testing usually requires suitable master/slave hardware or a dedicated test setup; do not claim that this OPC UA exercise proves EtherCAT experience.
 
-## 13. Suggested completion sequence
-
-| Milestone | Your deliverable | Exit check |
-|---|---|---|
-| M0 — Environment | Python, VS Code, Git, virtual environment | Dependencies install cleanly |
-| M1 — Understand the system | Project charter, architecture, signal list | You can explain each node, unit, and state |
-| M2 — Run the simulator | Normal and fault scenarios | CSV and JSON evidence generated |
-| M3 — Test behavior | Unit tests and fault cases | All tests pass; coverage threshold met |
-| M4 — Industrial interface | OPC UA server/client session | Read/write and command acknowledgement verified |
-| M5 — Engineering process | Issues, branches, PR, CI | CI passes on a Pull Request |
-| M6 — AWS familiarity | Local CodeBuild agent | `buildspec.yml` passes locally, if Docker is installed |
-| M7 — Verification package | Test record and virtual FAT checklist | Evidence is tied to a commit and config revision |
-| M8 — Portfolio release | Clean GitHub repo and release tag | README, docs, tests, and limitations are clear |
-
-
-## 15. License and attribution
+## 13. License and attribution
 
 This project's original training code and documentation are provided under the MIT License. Third-party dependencies retain their own licenses; see their respective package metadata. Hitachi Energy, MACH, Azure DevOps, AWS, Python, GitHub, OPC UA, EtherCAT, and other product or protocol names are referenced only to identify technologies and are not endorsements.
